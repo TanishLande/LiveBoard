@@ -4,6 +4,7 @@ import { api } from "@/convex/_generated/api"
 import { Button } from '@/components/ui/button'
 import { useMutation } from 'convex/react';
 import useApiMutation from '@/hooks/use-spi-mutation';
+import { toast } from 'sonner';
 
 const EmptyBoard = () => {
     const { organization } = useOrganization();
@@ -15,6 +16,12 @@ const EmptyBoard = () => {
         mutate({
             orgId: organization.id,
             title: "untitled"
+        })
+        .then((id) =>{
+            toast.success("Board was sucessfully created.");
+        })
+        .catch(()=>{
+            toast.error("Failed to create board.");
         })
     }
 

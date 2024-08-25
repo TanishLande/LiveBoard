@@ -9,7 +9,8 @@ export default defineSchema ({
         authorName: v.string(),
         imageUrl: v.string()
     })
-        .index("by_org",["orgId"])
+        //below by_org is a name  and second argument the the actual name of row.
+        .index("by_org",["orgId"]) // WHERE(SQL) OrgId is store in by_org
         .searchIndex("search_title",{
             searchField: "title",
             filterFields: ["orgId"]
