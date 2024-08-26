@@ -3,7 +3,7 @@ import { CreateOrganization, useOrganization } from '@clerk/nextjs'
 import { api } from "@/convex/_generated/api"
 import { Button } from '@/components/ui/button'
 import { useMutation } from 'convex/react';
-import useApiMutation from '@/hooks/use-spi-mutation';
+import useApiMutation from '@/hooks/use-api-mutation';
 import { toast } from 'sonner';
 
 const EmptyBoard = () => {

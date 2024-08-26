@@ -1,7 +1,7 @@
 "use client";
 
 import { api } from "@/convex/_generated/api";
-import useApiMutation from "@/hooks/use-spi-mutation"; // Corrected spelling for import
+import useApiMutation from "@/hooks/use-api-mutation"; // Corrected spelling for import
 import { cn } from "@/lib/utils";
 import { Plus } from "lucide-react";
 import { toast } from "sonner";
