@@ -1,7 +1,7 @@
-import { v } from 'convex/values'
-import { defineSchema, defineTable } from 'convex/server'
+import { v } from 'convex/values';
+import { defineSchema, defineTable } from 'convex/server';
 
-export default defineSchema ({
+export default defineSchema({
     boards: defineTable({
         title: v.string(),
         orgId: v.string(),
@@ -9,10 +9,20 @@ export default defineSchema ({
         authorName: v.string(),
         imageUrl: v.string()
     })
-        //below by_org is a name  and second argument the the actual name of row.
-        .index("by_org",["orgId"]) // WHERE(SQL) OrgId is store in by_org
-        .searchIndex("search_title",{
-            searchField: "title",
-            filterFields: ["orgId"]
-        })
-})
+    // Index for querying boards by organization ID
+    .index("by_org", ["orgId"]) 
+    // Search index for searching board titles filtered by organization ID
+    .searchIndex("search_title", {
+        searchField: "title",
+        filterFields: ["orgId"]
+    }),
+
+    useFavourite: defineTable({
+        orgId: v.string(),
+        userId: v.string(),
+        boardId: v.id("boards")
+    })
+    .index("by_board", ["boardId"])
+    .index("by_user_org", ["userId", "orgId"])
+    .index("by_user_board", ["userId", "boardId"])
+});

@@ -26,7 +26,7 @@ export const Item = ({
     const onclick = () =>{
         if(!setActive) return;
 
-        setActive({ organization: id })
+        setActive({ organization: id }) 
     }
 
     return(
