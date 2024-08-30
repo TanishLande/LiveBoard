@@ -77,3 +77,98 @@ export const update =  mutation({
         return baord;
     }
 });
+
+
+
+export const favourite = mutation({
+    args: {
+        id: v.id("boards"),
+        orgId: v.string(),
+    },
+    handler: async (ctx, args) => {
+        const identity = await ctx.auth.getUserIdentity();
+
+        if (!identity) {
+            throw new Error("User Unauthorized");
+        }
+
+        // Ensure identity.subject is a string
+        if (typeof identity.subject !== 'string') {
+            throw new Error("Invalid user ID");
+        }
+
+        const userId = identity.subject;
+
+        const board = await ctx.db.get(args.id);
+
+        if (!board) {
+            throw new Error("Board not found");
+        }
+
+        const existingFavourite = await ctx.db
+            .query("useFavourite")
+            .withIndex("by_user_board_org", (q) => 
+                q
+                .eq("userId", userId)
+                .eq("boardId", board._id)
+                .eq("orgId", args.orgId)
+            )
+            .unique();
+
+        if (existingFavourite) {
+            throw new Error("Board already favourited");
+        }
+
+        await ctx.db.insert("useFavourite", {
+            userId,
+            boardId: args.id,
+            orgId: args.orgId
+        });
+
+        return board;
+    }
+});
+
+
+
+export const unFavourite = mutation({
+    args: {
+        id: v.id("boards"),
+    },
+    handler: async (ctx, args) => {
+        const identity = await ctx.auth.getUserIdentity();
+
+        if (!identity) {
+            throw new Error("User Unauthorized");
+        }
+
+        if (typeof identity.subject !== 'string') {
+            throw new Error("Invalid user ID");
+        }
+
+        const userId = identity.subject;
+
+        const board = await ctx.db.get(args.id);
+
+        if (!board) {
+            throw new Error("Board not found");
+        }
+
+        const existingFavourite = await ctx.db
+            .query("useFavourite")
+            .withIndex("by_user_board", (q) => 
+                q
+                .eq("userId", userId)
+                .eq("boardId", board._id)
+            )
+            .unique();
+
+        if (!existingFavourite) {
+            throw new Error("Can't unfavourite which isn't favourite");
+        }
+
+        await ctx.db.delete(existingFavourite._id);
+
+        return board;
+    }
+});

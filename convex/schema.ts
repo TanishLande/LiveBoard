@@ -7,7 +7,8 @@ export default defineSchema({
         orgId: v.string(),
         authorId: v.string(),
         authorName: v.string(),
-        imageUrl: v.string()
+        imageUrl: v.string(),
+        
     })
     // Index for querying boards by organization ID
     .index("by_org", ["orgId"]) 
@@ -25,4 +26,5 @@ export default defineSchema({
     .index("by_board", ["boardId"])
     .index("by_user_org", ["userId", "orgId"])
     .index("by_user_board", ["userId", "boardId"])
+    .index("by_user_board_org", ["userId","boardId" , "orgId"  ])
 });
