@@ -2,7 +2,7 @@ import { createClient, LiveList, LiveObject } from "@liveblocks/client";
 import { createRoomContext } from "@liveblocks/react";
 
 const client = createClient({
-  publicApiKey: "pk_dev_feHwEgs7WjhYXzmTtfQqJZ9P-yps6qxEn4S4XdcTHeNPA3Jr6Y0CnI4ioSyReL1g",
+  authEndpoint: "/api/liveblock-auth"
 });
 
 // Presence represents the properties that will exist on every User in the Room
@@ -30,10 +30,10 @@ type BoardItem = {
 // UserMeta represents static/readonly metadata on each User, as provided by your own custom auth backend (if used).
 // Useful for data that will not change during a session, like a User's name or avatar.
 type UserMeta = {
-  id: string;
-  info: {
-    name: string;
-    avatar: string;
+  id?: string;
+  info?: {
+    name?: string;
+    picture?: string;
   };
 };
 
