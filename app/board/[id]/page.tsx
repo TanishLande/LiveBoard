@@ -3,6 +3,9 @@
 import React from 'react';
 import { Canvas } from './_components/canvas';
 
+import { Room } from "@/components/room"
+import { Loading } from '@/components/canvas-loading';
+
 interface ParamsProps {
     params: {
         id: string;
@@ -12,7 +15,11 @@ interface ParamsProps {
 const BoardPage = ({params}: ParamsProps) => {
 
   return (
-      <Canvas id= {params.id} />
+      <Room roomId={params.id}
+        fallback={<Loading />}
+      >
+        <Canvas id= {params.id} />
+      </Room>
   );
 };
 

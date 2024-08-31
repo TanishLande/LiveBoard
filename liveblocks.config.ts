@@ -1,0 +1,66 @@
+import { createClient, LiveList, LiveObject } from "@liveblocks/client";
+import { createRoomContext } from "@liveblocks/react";
+
+const client = createClient({
+  publicApiKey: "pk_dev_feHwEgs7WjhYXzmTtfQqJZ9P-yps6qxEn4S4XdcTHeNPA3Jr6Y0CnI4ioSyReL1g",
+});
+
+// Presence represents the properties that will exist on every User in the Room
+// and that will automatically be kept in sync. Accessible through the `user.presence` property.
+type Presence = {
+  cursor: { x: number; y: number } | null;
+  isTyping: boolean;
+};
+
+// Storage represents the shared document that persists in the Room, even after all Users leave.
+// Fields under Storage typically are LiveList, LiveMap, LiveObject instances, for which updates are automatically persisted and synced to all connected clients.
+type Storage = {
+  boardItems: LiveList<LiveObject<BoardItem>>;
+  // Add more fields as needed
+};
+
+type BoardItem = {
+  id: string;
+  type: "sticky" | "shape";
+  content: string;
+  position: { x: number; y: number };
+  // Add more properties as needed
+};
+
+// UserMeta represents static/readonly metadata on each User, as provided by your own custom auth backend (if used).
+// Useful for data that will not change during a session, like a User's name or avatar.
+type UserMeta = {
+  id: string;
+  info: {
+    name: string;
+    avatar: string;
+  };
+};
+
+// Optionally, RoomEvent can be used to define the data shape of custom events emitted 
+// and listened for using room.broadcastEvent and room.subscribe("my-event", callback).
+type RoomEvent = 
+  | { type: "CURSOR_UPDATE"; cursor: { x: number; y: number } }
+  | { type: "ITEM_UPDATE"; item: BoardItem };
+
+// Optionally, customize the type of custom thread metadata.
+type ThreadMetadata = {
+  itemId: string;
+  resolved: boolean;
+};
+
+export const {
+  RoomProvider,
+  useMyPresence,
+  useStorage,
+  useMutation,
+  useOthers,
+  useUpdateMyPresence,
+  useRoom,
+  useSelf,
+  useThreads,
+  useCreateThread,
+  useEditThreadMetadata,
+  useUser,
+  useRoomInfo,
+} = createRoomContext<Presence, Storage, UserMeta, RoomEvent, ThreadMetadata>(client);
