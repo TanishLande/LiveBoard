@@ -12,22 +12,30 @@ interface BoardListProps {
   orgId?: string;
   query?: {
     search?: string;
-    favorites?: string;
+    favorites?: string; // Keep this as 'favorites' to match URL parameter
   };
 }
 
 export const BoardList = ({ orgId, query }: BoardListProps) => {
-  const data = useQuery(api.boards.get, { orgId: orgId || "" });
+  // Convert 'favorites' to 'isFavorite' for the API call
+  const apiQuery = {
+    orgId: orgId || "",
+    ...(query?.search ? { search: query.search } : {}),
+    ...(query?.favorites ? { isFavorite: query.favorites } : {}),
+  };
+
+  const data = useQuery(api.boards.get, apiQuery);
+
+  const isFavoriteView = query?.favorites === "true";
 
   if (data === undefined) {
     return (
       <>
         <h2 className="text-3xl">
-          {query?.favorites ? "Favourite boards" : "Team boards"}
+          {isFavoriteView ? "Favourite boards" : "Team boards"}
         </h2>
-        <div className="grid grid-cols-1 dm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-5 mt-8 pb-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-5 mt-8 pb-10">
           <BoardButton orgId={orgId} disabled />
-          {/* Render 5 skeletons */}
           {[...Array(5)].map((_, index) => (
             <BoardCard.Skeleton key={index} />
           ))}
@@ -40,7 +48,7 @@ export const BoardList = ({ orgId, query }: BoardListProps) => {
     return <EmptySearch />;
   }
 
-  if (!data?.length && query?.favorites) {
+  if (!data?.length && isFavoriteView) {
     return <EmptyFav />;
   }
 
@@ -51,9 +59,9 @@ export const BoardList = ({ orgId, query }: BoardListProps) => {
   return (
     <div>
       <h2 className="text-3xl">
-        {query?.favorites ? "Favourite boards" : "Team boards"}
+        {isFavoriteView ? "Favourite boards" : "Team boards"}
       </h2>
-      <div className="grid grid-cols-1 dm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-5 mt-8 pb-10">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-5 mt-8 pb-10">
         <BoardButton orgId={orgId} />
         {data?.map((board) => (
           <BoardCard
