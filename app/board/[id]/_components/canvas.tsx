@@ -17,7 +17,7 @@ export const Canvas = (
     console.log(info);
     return(
         <main className="h-full w-full relative bg-neutral-200 touch-none" >
-            <Info />
+            <Info boardId={id} />
             <Participants />
             <Toolbar />
         </main>
