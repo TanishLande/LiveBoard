@@ -1,7 +1,7 @@
 import { useSelf } from "@/liveblocks.config";
 import { Info } from "./info"
 import { Participants } from "./participants"
-import { Toolbar } from "./toolbasr"
+import { Toolbar } from "./toolbar"
 
 interface  CanvasProps{
     id: string;
