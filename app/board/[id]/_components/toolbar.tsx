@@ -1,46 +1,98 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import { ToolButton } from "./tool-button";
 import { Circle, MousePointer, Pencil, Redo, Redo2, Square, StickyNote, Type, Undo, Undo2 } from "lucide-react";
+import { CanvasMode, LayerType } from "@/type/canvas";
 
-export const Toolbar = () => {
+type CanvasState = any;
+
+interface ToolbarProps {
+    canvasState: CanvasState;
+    setCanvasState: (newState:  CanvasState) => void;
+    undo: ()=> void;
+    redo: ()=> void;
+    canUndo: boolean;
+    canRedo: boolean;
+}
+
+export const Toolbar = ({
+    canvasState,
+    setCanvasState,
+    undo,
+    redo,
+    canRedo,
+}: ToolbarProps ) => {
+
+
     return (
         <div className="absolute top-[50%] -translate-y-[50%] left-2 flex flex-col items-center shadow-md gap-y-2">
             <div className="bg-white rounded-md p-1.5 flex flex-col items-center shadow-sm">
                 <ToolButton 
                     label="Select"
                     icon={MousePointer}
-                    onClick={()=>{}}
-                    isActive={false}
+                    onClick={() => setCanvasState({ mode: CanvasMode.None })}
+                    isActive={
+                        canvasState.mode === CanvasMode.None ||
+                        canvasState.mode === CanvasMode.Translating ||
+                        canvasState.mode === CanvasMode.SelectionNet ||
+                        canvasState.mode === CanvasMode.Pressing ||
+                        canvasState.mode === CanvasMode.Resizing
+
+                    }
                 />
                 <ToolButton 
                     label="Text"
                     icon={Type}
-                    onClick={()=>{}}
-                    isActive={false}
+                    onClick={() => setCanvasState({ 
+                        mode: CanvasMode.Inserting,
+                        layerType: LayerType.text
+                    })}
+                    isActive={
+                        canvasState.mode === CanvasMode.Inserting &&
+                        canvasState.layerType === LayerType.text
+                    }
+
                 />
                 <ToolButton 
                     label="Sticky Note"
                     icon={StickyNote}
-                    onClick={()=>{}}
-                    isActive={false}
+                    onClick={() => setCanvasState({
+                        mode: CanvasMode.Inserting,
+                        layerType: LayerType.Note
+                    })}
+                    isActive={
+                        canvasState.mode === CanvasMode.Inserting &&
+                        canvasState.layerType === LayerType.Note
+                    }
                 />
                 <ToolButton 
                     label="Rectangle"
                     icon={Square}
-                    onClick={()=>{}}
-                    isActive={false}
+                    onClick={() => setCanvasState({
+                        mode: CanvasMode.Inserting,
+                        layerType: LayerType.Rectangle
+                    })}
+                    isActive={
+                        canvasState.mode === CanvasMode.Inserting &&
+                        canvasState.layerType === LayerType.Rectangle
+                    }
                 />
                 <ToolButton 
                     label="Ellipse"
                     icon={Circle}
-                    onClick={()=>{}}
-                    isActive={false}
+                    onClick={() => setCanvasState({
+                        mode: CanvasMode.Inserting,
+                        layerType: LayerType.Ellipse
+                    })}
+                    isActive={
+                        canvasState.mode === CanvasMode.Inserting &&
+                        canvasState.layerType === LayerType.Ellipse
+                    }
                 />
                 <ToolButton 
                     label="Pen"
                     icon={Pencil}
-                    onClick={()=>{}}
-                    isActive={false}
+                    onClick={() => setCanvasState({ mode: CanvasMode.Pencil })}
+                    isActive={canvasState.mode === CanvasMode.Pencil}
                 />
             </div>
             <div className="bg-white rounded-md p-1.5 flex flex-col items-center shadow-md">
