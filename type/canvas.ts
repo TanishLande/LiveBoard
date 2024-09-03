@@ -130,3 +130,5 @@
     Pencil,
     Translating
     };
+
+    export type Layers = RectangleLayer | EllipseLayer | PathLayer | TextLayer | NoteLayer

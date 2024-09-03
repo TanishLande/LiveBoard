@@ -1,5 +1,6 @@
-import { createClient, LiveList, LiveObject } from "@liveblocks/client";
+import { createClient, LiveList, LiveMap, LiveObject } from "@liveblocks/client";
 import { createRoomContext } from "@liveblocks/react";
+import { Layers } from "./type/canvas";
 
 const client = createClient({
   throttle: 16,
@@ -10,14 +11,14 @@ const client = createClient({
 // and that will automatically be kept in sync. Accessible through the `user.presence` property.
 type Presence = {
   cursor: { x: number; y: number } | null;
-  isTyping: boolean;
+  selection: string[];
 };
 
 // Storage represents the shared document that persists in the Room, even after all Users leave.
 // Fields under Storage typically are LiveList, LiveMap, LiveObject instances, for which updates are automatically persisted and synced to all connected clients.
 type Storage = {
-  boardItems: LiveList<LiveObject<BoardItem>>;
-  // Add more fields as needed
+  layers: LiveMap<string, LiveObject<Layers>>
+  layerIds: LiveList<string>  
 };
 
 type BoardItem = {
