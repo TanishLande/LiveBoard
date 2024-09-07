@@ -4,7 +4,7 @@ import { Layers } from "./type/canvas";
 
 const client = createClient({
   throttle: 16,
-  authEndpoint: "/api/liveblock-auth"
+  authEndpoint: "/api/liveblock-auth",
 });
 
 // Presence represents the properties that will exist on every User in the Room
@@ -65,4 +65,10 @@ export const {
   useEditThreadMetadata,
   useUser,
   useRoomInfo,
+  // Add these new hooks for history functionality
+  useHistory,
+  useUndo,
+  useRedo,
+  useCanUndo,
+  useCanRedo,
 } = createRoomContext<Presence, Storage, UserMeta, RoomEvent, ThreadMetadata>(client);

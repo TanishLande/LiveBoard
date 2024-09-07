@@ -1,3 +1,5 @@
+"use client"
+
 import { useSelf } from "@/liveblocks.config";
 import { Info } from "./info"
 import { Participants } from "./participants"
@@ -51,8 +53,9 @@ export const Canvas = (
         const liveLayers = storage.get("layers") as LiveMap<string, LiveObject<Layers>>;
         const liveLayerIds = storage.get("layerIds") as LiveList<string>;
     
+        // Exit if the maximum number of layers 
         if (liveLayers.size >= MAX_LAYERS) {
-            return; // Exit if the maximum number of layers is reached
+            return; 
         }
     
         const layerId = nanoid(); // Generate a unique ID for the new layer
@@ -78,7 +81,7 @@ export const Canvas = (
             x: camera.x - e.deltaX,
             y: camera.y - e.deltaY
         }));
-    }, [lastUsedColor]);
+    }, []);
     
 
     const onPointerMove = useMutation((
@@ -99,6 +102,31 @@ export const Canvas = (
         setMyPresence({ cursor: null });
     },[]);
 
+    const onPointerUp  =  useMutation((
+        {},
+        e
+    )=>{
+        const point =  pointerEventToCanvasPoint(e, camera);
+
+        console.log({
+            point, LayerType: canvasState.mode});
+
+        if(canvasState.mode === CanvasMode.Inserting){
+            insertLayer(canvasState.layerType , point)
+        } else { 
+            setCanvasState({
+                mode: CanvasMode.None
+            })
+        }
+
+        history.resume();
+    },[
+        camera,
+        canvasState,
+        history,
+        insertLayer
+    ])
+
     return(
         <main className="h-full w-full relative bg-neutral-200 touch-none" >
             <Info boardId={id} />
@@ -116,6 +144,7 @@ export const Canvas = (
                 onWheel={onWheel}
                 onPointerMove={onPointerMove}
                 onPointerLeave={onPointerLeave}
+                onPointerUp={onPointerUp}
             >
                 <g
                     style={{

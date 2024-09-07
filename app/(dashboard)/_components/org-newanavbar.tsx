@@ -15,19 +15,19 @@ const font = Poppins({
   weight: ["600"],
 });
 
-const OrgNavbar = () => {
+export const OrgNewbar = () => {
   const searchParams = useSearchParams();
   const favorites = searchParams.get("favorites");
 
   return (
-    <div className="hidden lg:flex flex-col w-[206px] pl-5 pt-5 bg-gray-100 h-full">
+    <div className="sm:hidden lg:flex flex-col w-[220px] px-5 pt-5 h-full">
       <Link href="/" className="mb-6">
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-2 pr-5 ">
           <Image src="/logo.svg" alt="Logo" height={50} width={50} />
-          <span className={cn("font-semibold text-2xl text-black", font.className)}>
+          <span className={cn("font-semibold text-2xl text-black pr-5 ", font.className)}>
             LiveBoard
           </span>
-        </div>
+        </div>  
       </Link>
       <OrganizationSwitcher
         hidePersonal
@@ -52,7 +52,7 @@ const OrgNavbar = () => {
       />
       <div className="mt-4 space-y-1 w-full">
         <Button
-          variant={favorites ? "ghost" : "secondary"} 
+          variant={favorites ? "ghost" : "secondary"}
           asChild
           size="lg"
           className="font-normal justify-start px-2 w-full"
@@ -63,7 +63,7 @@ const OrgNavbar = () => {
           </Link>
         </Button>
         <Button
-          variant={favorites ? "secondary" : "ghost"} 
+          variant={favorites ? "secondary" : "ghost"}
           asChild
           size="lg"
           className="font-normal justify-start px-2 w-full"
@@ -82,5 +82,3 @@ const OrgNavbar = () => {
     </div>
   );
 };
-
-export default OrgNavbar;
